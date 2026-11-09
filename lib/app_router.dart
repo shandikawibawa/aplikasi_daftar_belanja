@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+
 import 'core/widgets/main_scaffold_with_nav_bar.dart';
 import 'features/history/presentation/history_screen.dart';
 import 'features/home/presentation/home_screen.dart';
 import 'features/profile/presentation/profile_screen.dart';
+import 'features/shopping_list/presentation/create_shopping_list_screen.dart';
 import 'features/shopping_list/presentation/shopping_detail_screen.dart';
 import 'features/shopping_list/presentation/shopping_lists_screen.dart';
 
-final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
+final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>(
+  debugLabel: 'root',
+);
 
 final appRouter = GoRouter(
   navigatorKey: _rootNavigatorKey,
@@ -21,10 +25,7 @@ final appRouter = GoRouter(
         // Tab 0: Beranda
         StatefulShellBranch(
           routes: [
-            GoRoute(
-              path: '/',
-              builder: (context, state) => const HomeScreen(),
-            ),
+            GoRoute(path: '/', builder: (context, state) => const HomeScreen()),
           ],
         ),
         // Tab 1: Daftar Belanja
@@ -58,6 +59,11 @@ final appRouter = GoRouter(
     ),
     // Halaman Detail Belanja / Shopping Mode
     GoRoute(
+      path: '/buat-daftar',
+      parentNavigatorKey: _rootNavigatorKey,
+      builder: (context, state) => const CreateShoppingListScreen(),
+    ),
+    GoRoute(
       path: '/detail/:id',
       parentNavigatorKey: _rootNavigatorKey,
       builder: (context, state) {
@@ -67,4 +73,3 @@ final appRouter = GoRouter(
     ),
   ],
 );
-

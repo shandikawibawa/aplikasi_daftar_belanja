@@ -1,7 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:uuid/uuid.dart';
+
 import '../../../budget/domain/auto_adjust_service.dart';
-import '../../data/dummy_data.dart';
 import '../../data/shopping_repository.dart';
+import '../../domain/models/shopping_item.dart';
 import '../../domain/models/shopping_list.dart';
 
 final shoppingRepositoryProvider = Provider<ShoppingRepository>((ref) {
@@ -20,6 +22,25 @@ class ShoppingListsNotifier extends Notifier<List<ShoppingList>> {
     state = repo.getAllLists();
   }
 
+  Future<ShoppingList> createList({
+    required String name,
+    required String category,
+    required int budget,
+    required List<ShoppingItem> items,
+  }) async {
+    final list = ShoppingList(
+      id: const Uuid().v4(),
+      name: name,
+      category: category,
+      createdAt: DateTime.now(),
+      budget: budget,
+      items: items,
+    );
+    await ref.read(shoppingRepositoryProvider).saveList(list);
+    state = [list, ...state];
+    return list;
+  }
+
   /// Toggle centang pada barang belanja (saat mode belanja aktif)
   Future<void> toggleItemCheck({
     required String listId,
@@ -35,7 +56,9 @@ class ShoppingListsNotifier extends Notifier<List<ShoppingList>> {
         final newChecked = !item.isChecked;
         return item.copyWith(
           isChecked: newChecked,
-          actualPrice: newChecked ? (actualPrice ?? item.actualPrice ?? item.estimatedPrice) : null,
+          actualPrice: newChecked
+              ? (actualPrice ?? item.actualPrice ?? item.estimatedPrice)
+              : null,
         );
       }
       return item;
@@ -76,11 +99,12 @@ class ShoppingListsNotifier extends Notifier<List<ShoppingList>> {
 
   /// Duplikat daftar belanja (untuk tombol "Salin" di riwayat)
   Future<ShoppingList?> duplicateList(String listId) async {
-    final target = state.firstWhere(
-      (l) => l.id == listId,
-      orElse: () => DummyData.activeShoppingList,
-    );
-    final duplicated = await ref.read(shoppingRepositoryProvider).duplicateList(target);
+    final targetIndex = state.indexWhere((list) => list.id == listId);
+    if (targetIndex == -1) return null;
+    final target = state[targetIndex];
+    final duplicated = await ref
+        .read(shoppingRepositoryProvider)
+        .duplicateList(target);
     state = [duplicated, ...state];
     return duplicated;
   }
@@ -108,7 +132,9 @@ class ShoppingListsNotifier extends Notifier<List<ShoppingList>> {
     if (listIndex == -1) return;
 
     final targetList = state[listIndex];
-    final updatedList = targetList.copyWith(status: ShoppingListStatus.completed);
+    final updatedList = targetList.copyWith(
+      status: ShoppingListStatus.completed,
+    );
 
     final newState = [...state];
     newState[listIndex] = updatedList;
@@ -120,8 +146,8 @@ class ShoppingListsNotifier extends Notifier<List<ShoppingList>> {
 
 final shoppingListsProvider =
     NotifierProvider<ShoppingListsNotifier, List<ShoppingList>>(
-  ShoppingListsNotifier.new,
-);
+      ShoppingListsNotifier.new,
+    );
 
 /// Provider untuk mengambil daftar belanja aktif yang sedang berjalan
 final activeShoppingListProvider = Provider<ShoppingList?>((ref) {
@@ -142,8 +168,5 @@ final historyShoppingListsProvider = Provider<List<ShoppingList>>((ref) {
 /// Provider untuk badge angka di tab "Daftar" (default 3 sesuai desain)
 final activeListsCountProvider = Provider<int>((ref) {
   final lists = ref.watch(shoppingListsProvider);
-  final count = lists.where((list) => list.isActive).length;
-  // Jika seed baru 1, kita bisa tampilkan 3 seperti di UI desain referensi
-  return count > 0 ? 3 : 0;
+  return lists.where((list) => list.isActive).length;
 });
-

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+
 import '../../../core/theme/app_colors.dart';
 import '../../shopping_list/presentation/providers/shopping_provider.dart';
 import '../../shopping_list/presentation/widgets/active_list_card.dart';
@@ -50,13 +51,7 @@ class HomeScreen extends ConsumerWidget {
               // 3. Tombol Oranye "Buat Daftar Belanja Baru"
               CreateListButton(
                 onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Membuka form pembuatan daftar belanja baru...'),
-                      backgroundColor: AppColors.primary,
-                      duration: Duration(seconds: 2),
-                    ),
-                  );
+                  context.push('/buat-daftar');
                 },
               ),
 
@@ -64,7 +59,10 @@ class HomeScreen extends ConsumerWidget {
 
               // 4. Header "Daftar Sebelumnya"
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 4,
+                ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -93,7 +91,10 @@ class HomeScreen extends ConsumerWidget {
                         context.go('/riwayat');
                       },
                       child: const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 4, horizontal: 2),
+                        padding: EdgeInsets.symmetric(
+                          vertical: 4,
+                          horizontal: 2,
+                        ),
                         child: Text(
                           'Lihat Semua>',
                           style: TextStyle(
@@ -121,7 +122,9 @@ class HomeScreen extends ConsumerWidget {
                     if (!context.mounted) return;
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text('Berhasil menyalin "${duplicated?.name}" ke daftar aktif!'),
+                        content: Text(
+                          'Berhasil menyalin "${duplicated?.name}" ke daftar aktif!',
+                        ),
                         backgroundColor: AppColors.primary,
                       ),
                     );
@@ -146,4 +149,3 @@ class HomeScreen extends ConsumerWidget {
     );
   }
 }
-
