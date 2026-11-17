@@ -2,28 +2,18 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:uuid/uuid.dart';
 
 import '../domain/models/shopping_list.dart';
-import 'dummy_data.dart';
 
 class ShoppingRepository {
   static const String _boxName = 'shopping_lists_box';
+  static const _sampleListIds = ['hist_1', 'hist_2', 'hist_3'];
   Box? _box;
 
   Future<void> init() async {
     await Hive.initFlutter();
     _box = await Hive.openBox(_boxName);
 
-    if (_box!.isEmpty) {
-      await _seedInitialData();
-    } else {
-      // Remove the sample active list created by previous app versions.
-      await _box!.delete('active_1');
-    }
-  }
-
-  Future<void> _seedInitialData() async {
-    for (final item in DummyData.historyLists) {
-      await _box?.put(item.id, item.toMap());
-    }
+    // Remove sample lists created by previous app versions.
+    await _box!.deleteAll(['active_1', ..._sampleListIds]);
   }
 
   List<ShoppingList> getAllLists() {

@@ -18,10 +18,7 @@ class HistoryListCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Format tanggal: jika hari dan bulan ingin seperti gambar
-    final dateStr = list.id == 'hist_3'
-        ? AppFormatters.dateShort(list.createdAt)
-        : AppFormatters.dateStandard(list.createdAt);
+    final dateStr = AppFormatters.dateStandard(list.createdAt);
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
@@ -59,7 +56,7 @@ class HistoryListCard extends StatelessWidget {
               const SizedBox(width: 8),
 
               // Chip Status Budget (Hemat atau Pas Budget)
-              if (list.id == 'hist_2' || list.isPasBudget)
+              if (list.isPasBudget)
                 CustomBadge(
                   icon: const Text('🎯', style: TextStyle(fontSize: 10)),
                   label: 'Pas Budget',
@@ -241,4 +238,3 @@ class HistoryListCard extends StatelessWidget {
     );
   }
 }
-
