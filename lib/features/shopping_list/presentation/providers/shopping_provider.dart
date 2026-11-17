@@ -152,11 +152,8 @@ final shoppingListsProvider =
 /// Provider untuk mengambil daftar belanja aktif yang sedang berjalan
 final activeShoppingListProvider = Provider<ShoppingList?>((ref) {
   final lists = ref.watch(shoppingListsProvider);
-  try {
-    return lists.firstWhere((list) => list.isActive);
-  } catch (_) {
-    return lists.isNotEmpty ? lists.first : null;
-  }
+  final activeLists = lists.where((list) => list.isActive);
+  return activeLists.isEmpty ? null : activeLists.first;
 });
 
 /// Provider untuk daftar riwayat (sudah selesai)

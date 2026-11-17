@@ -63,5 +63,12 @@ void main() {
     expect(find.text('Beras'), findsOneWidget);
     expect(find.text('2x'), findsOneWidget);
     expect(find.text('Selesai Belanja'), findsOneWidget);
+
+    await tester.tap(find.text('Selesai Belanja'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('SEDANG BERJALAN'), findsNothing);
+    expect(find.text('Lanjutkan Belanja'), findsNothing);
+    expect(find.text('Belanja Mingguan'), findsOneWidget);
   });
 }
