@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/theme/app_colors.dart';
+import '../../auth/presentation/providers/auth_provider.dart';
 import '../../shopping_list/presentation/providers/shopping_provider.dart';
 import '../../shopping_list/presentation/widgets/active_list_card.dart';
 import '../../shopping_list/presentation/widgets/create_list_button.dart';
@@ -18,6 +19,7 @@ class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final activeList = ref.watch(activeShoppingListProvider);
     final historyLists = ref.watch(historyShoppingListsProvider);
+    final user = ref.watch(authProvider);
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -32,8 +34,8 @@ class HomeScreen extends ConsumerWidget {
               const SizedBox(height: 8),
 
               // 1. Sapaan & Level Hemat
-              const GreetingSection(
-                userName: 'Siti Rahma!',
+              GreetingSection(
+                userName: '${user?.name ?? 'Pengunjung'}!',
                 savingLevel: 'Level Hemat: Bijak',
               ),
 

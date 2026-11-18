@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/custom_badge.dart';
 
@@ -8,7 +9,7 @@ class GreetingSection extends StatelessWidget {
 
   const GreetingSection({
     super.key,
-    this.userName = 'Siti Rahma!',
+    this.userName = 'Pengunjung!',
     this.savingLevel = 'Level Hemat: Bijak',
   });
 
@@ -41,10 +42,7 @@ class GreetingSection extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 4),
-                    const Text(
-                      '👋',
-                      style: TextStyle(fontSize: 18),
-                    ),
+                    const Text('👋', style: TextStyle(fontSize: 18)),
                   ],
                 ),
                 const SizedBox(height: 4),
@@ -79,4 +77,3 @@ class GreetingSection extends StatelessWidget {
     );
   }
 }
-

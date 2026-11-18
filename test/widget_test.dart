@@ -19,7 +19,7 @@ void main() {
     expect(find.text('BelanjaPas'), findsOneWidget);
 
     // Pastikan Sapaan tampil
-    expect(find.textContaining('Halo, Siti Rahma!'), findsOneWidget);
+    expect(find.textContaining('Halo, Pengunjung!'), findsOneWidget);
 
     // Aplikasi dimulai tanpa daftar belanja aktif.
     expect(find.text('SEDANG BERJALAN'), findsNothing);

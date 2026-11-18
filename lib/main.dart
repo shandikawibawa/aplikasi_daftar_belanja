@@ -5,6 +5,8 @@ import 'package:intl/date_symbol_data_local.dart';
 
 import 'app_router.dart';
 import 'core/theme/app_theme.dart';
+import 'features/auth/data/auth_repository.dart';
+import 'features/auth/presentation/providers/auth_provider.dart';
 import 'features/shopping_list/data/shopping_repository.dart';
 import 'features/shopping_list/presentation/providers/shopping_provider.dart';
 
@@ -17,10 +19,15 @@ void main() async {
   // Inisialisasi penyimpanan lokal Hive.
   final shoppingRepo = ShoppingRepository();
   await shoppingRepo.init();
+  final authRepo = AuthRepository();
+  await authRepo.init();
 
   runApp(
     ProviderScope(
-      overrides: [shoppingRepositoryProvider.overrideWithValue(shoppingRepo)],
+      overrides: [
+        shoppingRepositoryProvider.overrideWithValue(shoppingRepo),
+        authRepositoryProvider.overrideWithValue(authRepo),
+      ],
       child: const BelanjaPasApp(),
     ),
   );

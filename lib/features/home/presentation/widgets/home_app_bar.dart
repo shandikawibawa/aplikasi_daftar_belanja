@@ -106,10 +106,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
             const SizedBox(width: 4),
             // Avatar Profil Bulat
-            const AppAvatar(
-              size: 40,
-              imageUrl: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=120',
-            ),
+            const AppAvatar(size: 40),
           ],
         ),
       ),
