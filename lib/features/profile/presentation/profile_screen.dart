@@ -38,22 +38,25 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     setState(() => _isSubmitting = true);
     try {
       if (_isRegistering) {
-        await ref.read(authProvider.notifier).register(
+        await ref
+            .read(authProvider.notifier)
+            .register(
               name: _nameController.text,
               email: _emailController.text,
               password: _passwordController.text,
             );
       } else {
-        await ref.read(authProvider.notifier).login(
+        await ref
+            .read(authProvider.notifier)
+            .login(
               email: _emailController.text,
               password: _passwordController.text,
             );
       }
     } on AuthException catch (error) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(error.message)),
-      );
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(error.message)));
     } finally {
       if (mounted) setState(() => _isSubmitting = false);
     }
@@ -163,8 +166,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   ),
                   validator: (value) {
                     final email = value?.trim() ?? '';
-                    return RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$')
-                            .hasMatch(email)
+                    return RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$').hasMatch(email)
                         ? null
                         : 'Masukkan email yang valid.';
                   },
@@ -290,8 +292,13 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   }
 
   Widget _buildSettings() {
-    return Container(
-      decoration: _cardDecoration(),
+    return Material(
+      color: AppColors.surface,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(24),
+        side: const BorderSide(color: AppColors.borderLight),
+      ),
+      elevation: 0,
       child: Column(
         children: [
           ListTile(

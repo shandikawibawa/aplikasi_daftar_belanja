@@ -20,6 +20,7 @@ class AuthException implements Exception {
 class AuthRepository {
   static const _boxName = 'user_accounts_box';
   static const _sessionKey = 'current_user_email';
+  static const _onboardingKey = 'onboarding_completed';
   Box? _box;
 
   AuthUser? get currentUser {
@@ -30,6 +31,8 @@ class AuthRepository {
     if (account is! Map) return null;
     return _userFromMap(Map<String, dynamic>.from(account));
   }
+
+  bool get onboardingCompleted => (_box?.get(_onboardingKey) as bool?) ?? false;
 
   Future<void> init() async {
     _box = await Hive.openBox(_boxName);
@@ -93,6 +96,10 @@ class AuthRepository {
     await _requireBox().delete(_sessionKey);
   }
 
+  Future<void> completeOnboarding() async {
+    await _requireBox().put(_onboardingKey, true);
+  }
+
   Box _requireBox() {
     final box = _box;
     if (box == null || !box.isOpen) {
@@ -108,9 +115,6 @@ class AuthRepository {
   }
 
   AuthUser _userFromMap(Map<String, dynamic> map) {
-    return AuthUser(
-      name: map['name'] as String,
-      email: map['email'] as String,
-    );
+    return AuthUser(name: map['name'] as String, email: map['email'] as String);
   }
 }

@@ -28,13 +28,15 @@ void main() async {
         shoppingRepositoryProvider.overrideWithValue(shoppingRepo),
         authRepositoryProvider.overrideWithValue(authRepo),
       ],
-      child: const BelanjaPasApp(),
+      child: BelanjaPasApp(authRepository: authRepo),
     ),
   );
 }
 
 class BelanjaPasApp extends StatelessWidget {
-  const BelanjaPasApp({super.key});
+  final AuthRepository? authRepository;
+
+  const BelanjaPasApp({super.key, this.authRepository});
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +44,7 @@ class BelanjaPasApp extends StatelessWidget {
       title: 'BelanjaPas',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
-      routerConfig: appRouter,
+      routerConfig: createAppRouter(authRepository),
       locale: const Locale('id', 'ID'),
       supportedLocales: const [Locale('id', 'ID'), Locale('en', 'US')],
       localizationsDelegates: const [
